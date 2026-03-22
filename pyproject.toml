@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "fin"
+version = "0.1.1"
+description = "mmmm....money"
+authors = ["Frank X. <git@frankpurcell.com>"]
+readme = "README.md"
+packages = [{ include = "fin" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.2.0"
+matplotlib = "^3.8.0"
+pypdf = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+fin = "fin.fin:main"
+parse = "fin.parser:main"
+read_pdf = "fin.pdf:main"
+four_pct = "fin.four_percent_rule:main"
+generate_images = "fin.generate_images:main"

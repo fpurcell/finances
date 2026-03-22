@@ -1,6 +1,30 @@
 #!/usr/bin/env python3
 
 import argparse
+import re
+
+
+def parse_balance(value: str) -> float:
+    cleaned = value.strip().replace(",", "").replace("$", "")
+    match = re.fullmatch(r"(.+?)\s*([kKmM])", cleaned)
+    if match:
+        try:
+            amount = float(match.group(1))
+        except ValueError as exc:
+            raise argparse.ArgumentTypeError(
+                "Balance must be a number like 1500000, 1e6, 800k, or 1.5M."
+            ) from exc
+
+        suffix = match.group(2).lower()
+        multiplier = {"k": 1_000, "m": 1_000_000}[suffix]
+        return amount * multiplier
+
+    try:
+        return float(cleaned)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(
+            "Balance must be a number like 1500000, 1e6, 800k, or 1.5M."
+        ) from exc
 
 
 def parse_args():
@@ -11,37 +35,43 @@ def parse_args():
         )
     )
     parser.add_argument(
-        "--balance",
-        type=float,
-        default=1_500_000,
-        help="Starting balance in dollars (default: 1500000)",
-    )
-    parser.add_argument(
         "--age",
+        "-a",
         type=int,
         default=59,
         help="Starting age (default: 59)",
     )
     parser.add_argument(
+        "--balance",
+        "-b",
+        type=parse_balance,
+        default=1_500_000,
+        help="Starting balance in dollars, for example 1500000, 1e6, 800k, or 1.5M (default: 1500000)",
+    )
+    parser.add_argument(
         "--growth",
+        "-g",
         type=float,
         default=3.2,
         help="Annual growth rate in percent (default: 3.2)",
     )
     parser.add_argument(
-        "--withdrawal",
-        type=float,
-        default=4.0,
-        help="Annual withdrawal rate in percent of starting balance (default: 4.0)",
-    )
-    parser.add_argument(
         "--inflation",
+        "-i",
         type=float,
         default=3.0,
         help="Annual inflation rate in percent for increasing withdrawals (default: 3.0)",
     )
     parser.add_argument(
+        "--withdrawal",
+        "-w",
+        type=float,
+        default=4.0,
+        help="Annual withdrawal rate in percent of starting balance (default: 4.0)",
+    )
+    parser.add_argument(
         "--years",
+        "-y",
         type=int,
         default=10,
         help="Number of years to project (default: 10)",

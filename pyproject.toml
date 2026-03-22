@@ -19,6 +19,6 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 fin = "fin.fin:main"
 parse = "fin.parser:main"
-read_pdf = "fin.pdf:main"
+pdf = "fin.pdf:main"
 four_pct = "fin.four_percent_rule:main"
 generate_images = "fin.generate_images:main"

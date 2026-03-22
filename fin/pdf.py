@@ -17,7 +17,7 @@ MONTHS = {
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Extract withdrawal transactions from a First Tech PDF export."
+        description="Extract withdrawal transactions from a Bank PDF export."
     )
     parser.add_argument(
         "pdf_path",

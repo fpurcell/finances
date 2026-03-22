@@ -10,6 +10,7 @@ bkup
 pid.txt
 log.txt
 out.txt
+*.csv
 *.tar
 *.pbf
 *.old

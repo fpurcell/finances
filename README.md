@@ -4,13 +4,13 @@ Small Python utilities for analyzing personal finance data in this repo.
 
 The project currently does three main things:
 
-- Parses a First Tech PDF export into CSV summaries.
+- Parses a Bank PDF export into CSV summaries.
 - Parses `TOTAL:` lines from a text report and plots them over time.
 - Runs a simple retirement projection using a 4% withdrawal model.
 
 ## Project Layout
 
-- [`fin/pdf.py`](fin/pdf.py): extracts withdrawal transactions from a First Tech PDF and writes CSV outputs.
+- [`fin/pdf.py`](fin/pdf.py): extracts withdrawal transactions from a Bank PDF and writes CSV outputs.
 - [`fin/parser.py`](fin/parser.py): extracts dated `TOTAL:` values from a text file and plots them.
 - [`fin/plot.py`](fin/plot.py): shared plotting helper used by `parser.py`.
 - [`fin/four_percent_rule.py`](fin/four_percent_rule.py): prints a year-by-year retirement projection table.
@@ -28,19 +28,21 @@ If you do not want to install the package entry points, you can still run the mo
 
 ## Commands
 
-### Parse First Tech PDF
+### Parse Bank PDF
 
 Reads a PDF statement/export and writes three CSV files in the repo root.
 
 ```bash
-poetry run python -m fin.pdf "First Tech Federal Credit Union.pdf"
+poetry run pdf "Bank.pdf"
 ```
 
 You can omit the filename to use the default:
 
 ```bash
-poetry run python -m fin.pdf
+poetry run pdf
 ```
+
+If you prefer to run the module directly, `poetry run python -m fin.pdf` still works.
 
 Outputs:
 
@@ -90,6 +92,8 @@ poetry run python -m fin.four_percent_rule \
   --years 10
 ```
 
+`--balance` also accepts shorthand values such as `800k`, `1.5M`, or `$2M`.
+
 ### Generate Diagram Images
 
 Generates PNG sequence diagrams for the current scripts.
@@ -114,6 +118,6 @@ Outputs:
 
 ## Notes
 
-- `fin/pdf.py` is currently tailored to the structure of the First Tech PDF export in this repo.
+- `fin/pdf.py` is currently tailored to the structure of the Bank PDF export in this repo.
 - `fin/parser.py` expects dates in the form `%b %d, %Y`, for example `Jan 2, 2024`.
 - Generated CSV files are written to the repository root, not the `docs/` directory.

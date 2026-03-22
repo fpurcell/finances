@@ -22,3 +22,9 @@ parse = "fin.parser:main"
 pdf = "fin.pdf:main"
 four_pct = "fin.four_percent_rule:main"
 generate_images = "fin.generate_images:main"
+
+[dependency-groups]
+dev = [
+    "ruff (>=0.15.7,<0.16.0)",
+    "pre-commit (>=4.5.1,<5.0.0)"
+]

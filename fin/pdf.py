@@ -9,9 +9,18 @@ from pypdf import PdfReader
 
 
 MONTHS = {
-    "JAN": 1, "FEB": 2, "MAR": 3, "APR": 4,
-    "MAY": 5, "JUN": 6, "JUL": 7, "AUG": 8,
-    "SEP": 9, "OCT": 10, "NOV": 11, "DEC": 12,
+    "JAN": 1,
+    "FEB": 2,
+    "MAR": 3,
+    "APR": 4,
+    "MAY": 5,
+    "JUN": 6,
+    "JUL": 7,
+    "AUG": 8,
+    "SEP": 9,
+    "OCT": 10,
+    "NOV": 11,
+    "DEC": 12,
 }
 
 
@@ -21,7 +30,7 @@ def parse_args():
     )
     parser.add_argument(
         "pdf_path",
-        help=f"Path to the PDF file.",
+        help="Path to the PDF file.",
     )
     return parser.parse_args()
 
@@ -71,11 +80,13 @@ def extract_transactions(transactions_text: str) -> list[dict]:
         balance = parse_money(balance_str)
 
         if amount < 0:
-            rows.append({
-                "date": date_obj.strftime("%Y-%m-%d"),
-                "amount": amount,
-                "balance": balance,
-            })
+            rows.append(
+                {
+                    "date": date_obj.strftime("%Y-%m-%d"),
+                    "amount": amount,
+                    "balance": balance,
+                }
+            )
 
     return rows
 
@@ -99,7 +110,7 @@ def extract_descriptions(descriptions_text: str) -> list[str]:
             break
 
         if line.startswith("ACH Debit "):
-            desc = line[len("ACH Debit "):].strip()
+            desc = line[len("ACH Debit ") :].strip()
             i += 1
 
             while i < len(lines):
@@ -163,7 +174,11 @@ def normalize_payee(payee: str) -> str:
             return canonical
 
     # Generic cleanup: trim trailing merchant-type suffixes
-    p = re.sub(r"\s*-\s*(BILLPAY|PAYMENT|UTILITY|INS PREM|REFUSE SVC|SPEEDPAY|ACH PMT|ONLINE PMT|TRANSFER)$", "", p)
+    p = re.sub(
+        r"\s*-\s*(BILLPAY|PAYMENT|UTILITY|INS PREM|REFUSE SVC|SPEEDPAY|ACH PMT|ONLINE PMT|TRANSFER)$",
+        "",
+        p,
+    )
 
     return p
 
@@ -173,13 +188,15 @@ def write_transactions_csv(rows: list[dict], output_path: str) -> None:
         writer = csv.writer(f)
         writer.writerow(["date", "payee", "normalized_payee", "amount", "balance"])
         for row in rows:
-            writer.writerow([
-                row["date"],
-                row["payee"],
-                row["normalized_payee"],
-                f"{row['amount']:.2f}",
-                f"{row['balance']:.2f}",
-            ])
+            writer.writerow(
+                [
+                    row["date"],
+                    row["payee"],
+                    row["normalized_payee"],
+                    f"{row['amount']:.2f}",
+                    f"{row['balance']:.2f}",
+                ]
+            )
 
 
 def write_grouped_csv(rows: list[dict], key_name: str, output_path: str) -> None:
@@ -201,11 +218,13 @@ def write_grouped_csv(rows: list[dict], key_name: str, output_path: str) -> None
         writer = csv.writer(f)
         writer.writerow([key_name, "count", "total_withdrawn"])
         for key, stats in sorted_items:
-            writer.writerow([
-                key,
-                stats["count"],
-                f"{stats['total']:.2f}",
-            ])
+            writer.writerow(
+                [
+                    key,
+                    stats["count"],
+                    f"{stats['total']:.2f}",
+                ]
+            )
 
 
 def main():
